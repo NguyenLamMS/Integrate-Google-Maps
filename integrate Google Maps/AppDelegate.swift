@@ -8,7 +8,8 @@
 
 import UIKit
 import CoreData
-
+import GoogleMaps
+import GooglePlaces
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -17,6 +18,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        //AIzaSyAGqOeo7oA9GNKQSOT3UrSyXfatIjFt4kA
+        GMSServices.provideAPIKey("AIzaSyAGqOeo7oA9GNKQSOT3UrSyXfatIjFt4kA")
+        GMSPlacesClient.provideAPIKey("AIzaSyAGqOeo7oA9GNKQSOT3UrSyXfatIjFt4kA")
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        if let windown = self.window{
+            window?.backgroundColor = UIColor.white
+            
+            let nav = UINavigationController()
+            let mainView = ViewController()
+            nav.viewControllers = [mainView]
+            window?.rootViewController = nav
+            window?.makeKeyAndVisible()
+        }
         return true
     }
 
