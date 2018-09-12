@@ -62,7 +62,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
         let lat = place.coordinate.latitude
         let long = place.coordinate.longitude
-
         showPartyMarkers(lat: lat, long: long)
         let camera = GMSCameraPosition.camera(withLatitude: lat, longitude: long, zoom: 17.0)
         myMapView.camera = camera
@@ -73,7 +72,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         marker.title = "\(place.name)"
         marker.snippet = "\(place.formattedAddress!)"
         marker.map = myMapView
-
+        marker.icon = #imageLiteral(resourceName: "image1")
+        creatCircle(lat: lat, long: long)
         self.dismiss(animated: true, completion: nil) // dismiss after place selected
     }
     
@@ -116,9 +116,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         guard let customMarkerView = marker.iconView as? CustomMarkerView else { return false }
         let img = customMarkerView.img!
         let customMarker = CustomMarkerView(frame: CGRect(x: 0, y: 0, width: customMarkerWidth, height: customMarkerHeight), image: img, borderColor: UIColor.white, tag: customMarkerView.tag)
-
         marker.iconView = customMarker
-
         return false
     }
     
@@ -133,6 +131,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         guard let customMarkerView = marker.iconView as? CustomMarkerView else { return }
         let tag = customMarkerView.tag
         restaurantTapped(tag: tag)
+        
     }
 
     func mapView(_ mapView: GMSMapView, didCloseInfoWindowOf marker: GMSMarker) {
@@ -167,6 +166,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         let location: CLLocation? = myMapView.myLocation
         if location != nil {
             myMapView.animate(toLocation: (location?.coordinate)!)
+            let lat = location?.coordinate.latitude
+            let long = location?.coordinate.longitude
+            creatCircle(lat: lat!, long: long!)
         }
     }
 
@@ -207,7 +209,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         btnMyLocation.widthAnchor.constraint(equalToConstant: 50).isActive=true
         btnMyLocation.heightAnchor.constraint(equalTo: btnMyLocation.widthAnchor).isActive=true
     }
-    
+    func creatCircle(lat: Double,long: Double){
+        let circleCenter = CLLocationCoordinate2D(latitude: lat, longitude: long)
+        let circ = GMSCircle(position: circleCenter, radius: 200)
+        
+        circ.fillColor = UIColor(red: 0.35, green: 0, blue: 0, alpha: 0.05)
+        circ.strokeColor = .red
+        circ.strokeWidth = 5
+        circ.map = myMapView
+    }
     let myMapView: GMSMapView = {
         let v=GMSMapView()
         v.translatesAutoresizingMaskIntoConstraints=false
